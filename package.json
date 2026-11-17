@@ -1,0 +1,11 @@
+{
+  "name": "brave-youtube-enhancer",
+  "version": "0.1.0",
+  "description": "Modular YouTube features that Brave/YouTube do not have. Feature 1: go back when a video ends instead of being trapped on the end screen.",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "check": "node --check src/youtube-navigation.js && node --check src/video-end-back.js && node --check src/main.js"
+  }
+}

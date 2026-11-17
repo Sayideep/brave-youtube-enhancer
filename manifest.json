@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Brave YouTube Enhancer",
+  "version": "0.1.0",
+  "description": "Modular YouTube features YouTube does not have. Feature 1: go back when a video ends instead of being trapped on the end screen.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.youtube.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": [
+        "src/youtube-navigation.js",
+        "src/video-end-back.js",
+        "src/main.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
