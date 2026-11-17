@@ -11,10 +11,11 @@
   "use strict";
 
   const DEFAULTS = {
-    enabled: true,            // master switch for Feature 1 (P0-4: was OFF until end-detection was proven)
+    enabled: true,            // master switch for Feature 1
     backInPlaylists: false,   // never fight playlist auto-advance unless the user opts in
     skipIfFullscreen: false,  // set true to leave fullscreen users alone
-    debug: false              // log skip/back decisions to console.debug
+    debug: false,             // log skip/back decisions to console.debug
+    hideEndScreen: true       // Feature 2: hide end-screen cards/recommendations overlay
   };
 
   const STORAGE_KEY = DEFAULTS; // used as chrome.storage.sync.get() defaults
@@ -131,6 +132,16 @@
       });
       api.register("video-end-back", endBack);
       api.endBack = endBack;
+    }
+
+    // Feature 2
+    if (env.YTAHideEndScreen) {
+      const hideEndScreen = env.YTAHideEndScreen.createHideEndScreen({
+        settings: settings,
+        doc: doc
+      });
+      api.register("hide-end-screen", hideEndScreen);
+      api.hideEndScreen = hideEndScreen;
     }
 
     if (nav) nav.start();

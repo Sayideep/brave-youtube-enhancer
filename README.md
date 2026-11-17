@@ -1,13 +1,11 @@
 # Brave YouTube Enhancer
 
-Modular, additive YouTube features for Brave (desktop) — starting with **Feature 1**:
+Modular, additive YouTube features for Brave (desktop).
 
-> **When a YouTube video finishes, go Back to the previous page instead of
-> staying trapped on the end-screen recommendations.**
+- **Feature 1:** When a YouTube video finishes, go Back to the previous page instead of staying trapped on the end-screen recommendations.
+- **Feature 2:** Hide end-screen cards/recommendations overlay (`.ytp-endscreen-content`, cards, etc.).
 
-Nothing in Brave or YouTube is modified. This is a plain MV3 content-script
-extension; it only listens and, when a video truly ends, calls
-`history.back()` — the same navigation the user's Back button uses.
+Nothing in Brave or YouTube is modified. Plain MV3 content-script extension / userscript. Feature 1 navigates to the previous URL when the main video ends (with guards). Feature 2 injects CSS to hide end-screen UI.
 
 ## Why this approach (research summary, 2026-11)
 
@@ -101,6 +99,7 @@ then watch `[YTA]` messages (`skip (ad)`, `going back to …`).
 | `backInPlaylists` | `false` | Also go back at the end of playlist items |
 | `skipIfFullscreen` | `false` | Do nothing while fullscreen |
 | `debug` | `false` | Log decisions to `console.debug` |
+| `hideEndScreen` | `true` | Feature 2: hide end-screen cards/recommendations overlay |
 
 ## Adding Feature 2, 3, 4 later
 

@@ -47,13 +47,21 @@ function createFakeEnv(opts) {
   const doc = new FakeTarget();
   const win = new FakeTarget();
 
+  let _href = opts.href || "https://www.youtube.com/";
+  win.navigations = [];
   win.location = {
-    href: opts.href || "https://www.youtube.com/",
+    get href() {
+      return _href;
+    },
+    set href(v) {
+      win.navigations.push(v);
+      _href = v;
+    },
     get pathname() {
-      return makeUrl(this.href).pathname;
+      return makeUrl(_href).pathname;
     },
     get search() {
-      return makeUrl(this.href).search;
+      return makeUrl(_href).search;
     }
   };
 

@@ -78,7 +78,7 @@
       }
       armed = false;
       debug("going back to " + verdict.previous + " (" + verdict.reason + ")");
-      win.history.back();
+      win.location.href = verdict.previous;
       return verdict;
     }
 

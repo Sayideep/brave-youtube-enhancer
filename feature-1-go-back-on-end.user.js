@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Brave YouTube Enhancer — Feature 1: Go Back on Video End
+// @name         Brave YouTube Enhancer — Features 1+2
 // @namespace    http://tampermonkey.net/
-// @version      0.1.0
-// @description  When a YouTube video finishes, go back to the previous page instead of being trapped on end-screen recommendations.
+// @version      0.2.0
+// @description  Feature 1: Go back when a YouTube video ends. Feature 2: Hide end-screen cards/recommendations.
 // @author       Sayideep
 // @match        *://www.youtube.com/*
 // @grant        none
@@ -14,10 +14,11 @@
 
   /* ── settings (edit these directly) ─────────────────────────────── */
   const SETTINGS = {
-    enabled: true,        // master switch
-    backInPlaylists: false,   // never fight playlist auto-advance unless true
-    skipIfFullscreen: false,  // leave fullscreen users alone unless true
-    debug: false          // log skip/back decisions to console.debug
+    enabled: true,           // Feature 1 master switch: go back on video end
+    backInPlaylists: false,  // never fight playlist auto-advance unless true
+    skipIfFullscreen: false, // leave fullscreen users alone unless true
+    debug: false,            // log decisions to console.debug
+    hideEndScreen: true      // Feature 2: hide end-screen cards/recommendations
   };
 
   /* ── SPA navigation tracker ─────────────────────────────────────── */
@@ -114,7 +115,7 @@
     }
     armed = false;
     debug("going back to " + verdict.previous + " (" + verdict.reason + ")");
-    window.history.back();
+    location.href = verdict.previous;
     return verdict;
   }
 
@@ -142,6 +143,34 @@
 
   startNavigation();
 
+  /* ── Feature 2: hide end-screen cards/recommendations ───────────── */
+  const HIDE_ENDSCREEN_STYLE_ID = "yta-hide-endscreen-style";
+  const HIDE_ENDSCREEN_CSS = [
+    ".ytp-ce-element,",
+    ".ytp-endscreen-content,",
+    ".ytp-fullscreen-grid,",
+    ".ytp-fullscreen-grid-stills-container,",
+    ".html5-endscreen,",
+    "ytd-endscreen-renderer {",
+    "  display: none !important;",
+    "}"
+  ].join("\n");
+
+  function applyHideEndScreen() {
+    const existing = document.getElementById(HIDE_ENDSCREEN_STYLE_ID);
+    if (SETTINGS.hideEndScreen) {
+      if (!existing) {
+        const style = document.createElement("style");
+        style.id = HIDE_ENDSCREEN_STYLE_ID;
+        style.textContent = HIDE_ENDSCREEN_CSS;
+        (document.head || document.documentElement).appendChild(style);
+      }
+    } else if (existing) {
+      existing.remove();
+    }
+  }
+  applyHideEndScreen();
+
   /* ── public debug handle ────────────────────────────────────────── */
   window.__ytaFeature1 = {
     evaluate: evaluate,
@@ -152,8 +181,9 @@
     lastResult: function () { return lastResult; },
     previousUrl: previousUrl,
     videoId: videoId,
-    settings: SETTINGS
+    settings: SETTINGS,
+    applyHideEndScreen: applyHideEndScreen
   };
 
-  debug("loaded");
+  debug("loaded (F1+F2)");
 })();

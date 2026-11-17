@@ -7,11 +7,12 @@ const YTANavigation = require("../src/youtube-navigation.js");
 const YTAEndBack = require("../src/video-end-back.js");
 const YTAEnhancer = require("../src/main.js");
 
-test("DEFAULTS are sane (Feature 1 ON, playlists untouched, fullscreen allowed)", () => {
+test("DEFAULTS are sane (Feature 1 ON, playlists untouched, fullscreen allowed, Feature 2 ON)", () => {
   assert.equal(YTAEnhancer.DEFAULTS.enabled, true);
   assert.equal(YTAEnhancer.DEFAULTS.backInPlaylists, false);
   assert.equal(YTAEnhancer.DEFAULTS.skipIfFullscreen, false);
   assert.equal(YTAEnhancer.DEFAULTS.debug, false);
+  assert.equal(YTAEnhancer.DEFAULTS.hideEndScreen, true);
 });
 
 test("createEnhancer wires nav + video-end-back feature end-to-end", () => {
@@ -31,7 +32,7 @@ test("createEnhancer wires nav + video-end-back feature end-to-end", () => {
   navigate(env, "https://www.youtube.com/watch?v=abc");
   env.video.ended = true;
   env.doc.dispatch("ended", { target: env.video });
-  assert.equal(env.win.history.backCalls, 1);
+  assert.equal(env.win.navigations.length, 1);
   api.stop();
 });
 
