@@ -12,6 +12,8 @@
         "src/youtube-navigation.js",
         "src/video-end-back.js",
         "src/hide-end-screen.js",
+        "src/hide-shorts.js",
+        "src/hide-home-recommendations.js",
         "src/main.js"
       ],
       "run_at": "document_idle"

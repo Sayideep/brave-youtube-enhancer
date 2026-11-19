@@ -4,8 +4,10 @@ Modular, additive YouTube features for Brave (desktop).
 
 - **Feature 1:** When a YouTube video finishes, go Back to the previous page instead of staying trapped on the end-screen recommendations.
 - **Feature 2:** Hide end-screen cards/recommendations overlay (`.ytp-endscreen-content`, cards, etc.).
+- **Feature 3:** Hide Shorts shelves, tiles, and links.
+- **Feature 4:** Hide the recommended video feed on the homepage only; search, subscriptions, and watch pages are not targeted.
 
-Nothing in Brave or YouTube is modified. Plain MV3 content-script extension / userscript. Feature 1 navigates to the previous URL when the main video ends (with guards). Feature 2 injects CSS to hide end-screen UI.
+Nothing in Brave or YouTube is modified. Plain MV3 content-script extension / userscript. Feature 1 navigates to the previous URL when the main video ends (with guards). Features 2–4 inject scoped CSS to hide their respective YouTube UI.
 
 ## Why this approach (research summary, 2026-11)
 
@@ -46,18 +48,23 @@ prevents, or rewrites any navigation event.
 
 ```
 brave-youtube-enhancer/
-├── manifest.json                 MV3 manifest (3 content scripts, storage permission)
+├── manifest.json                 MV3 manifest (content scripts, storage permission)
 ├── README.md                     this file
 ├── package.json                  npm test / npm run check
 ├── src/
 │   ├── youtube-navigation.js     SPA tracker + per-tab URL stack
 │   ├── video-end-back.js         end detection + guards + history.back()
+│   ├── hide-end-screen.js        Feature 2: hide player end-screen cards
+│   ├── hide-shorts.js            Feature 3: hide Shorts shelves/tiles/links
+│   ├── hide-home-recommendations.js Feature 4: hide homepage recommendation feed
 │   └── main.js                   settings, feature registry, boot
 └── tests/
     ├── helpers.js                fake DOM/video/history harness
     ├── youtube-navigation.test.js
     ├── video-end-back.test.js
-    └── main.test.js
+    ├── main.test.js
+    ├── hide-end-screen.test.js
+    └── hide-page-content.test.js
 ```
 
 ## Install (Brave desktop, permanent)
@@ -100,8 +107,10 @@ then watch `[YTA]` messages (`skip (ad)`, `going back to …`).
 | `skipIfFullscreen` | `false` | Do nothing while fullscreen |
 | `debug` | `false` | Log decisions to `console.debug` |
 | `hideEndScreen` | `true` | Feature 2: hide end-screen cards/recommendations overlay |
+| `hideShorts` | `true` | Feature 3: hide Shorts shelves, tiles, and links |
+| `hideHomeRecommendations` | `true` | Feature 4: hide homepage recommendation feed only |
 
-## Adding Feature 2, 3, 4 later
+## Adding more features later
 
 1. Create `src/<feature-name>.js` using the same UMD wrapper as the others,
    exposing a factory: `createX({ nav, settings, doc, win })` returning

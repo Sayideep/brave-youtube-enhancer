@@ -6,6 +6,6 @@
   "license": "MIT",
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "check": "node --check src/youtube-navigation.js && node --check src/video-end-back.js && node --check src/hide-end-screen.js && node --check src/main.js"
+    "check": "node --check src/youtube-navigation.js && node --check src/video-end-back.js && node --check src/hide-end-screen.js && node --check src/hide-shorts.js && node --check src/hide-home-recommendations.js && node --check src/main.js"
   }
 }

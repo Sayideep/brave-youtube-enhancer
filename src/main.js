@@ -15,7 +15,9 @@
     backInPlaylists: false,   // never fight playlist auto-advance unless the user opts in
     skipIfFullscreen: false,  // set true to leave fullscreen users alone
     debug: false,             // log skip/back decisions to console.debug
-    hideEndScreen: true       // Feature 2: hide end-screen cards/recommendations overlay
+    hideEndScreen: true,       // Feature 2: hide end-screen cards/recommendations overlay
+    hideShorts: true,          // Hide Shorts shelves, tiles, and links
+    hideHomeRecommendations: true // Hide recommended video feed on homepage only
   };
 
   const STORAGE_KEY = DEFAULTS; // used as chrome.storage.sync.get() defaults
@@ -142,6 +144,18 @@
       });
       api.register("hide-end-screen", hideEndScreen);
       api.hideEndScreen = hideEndScreen;
+    }
+
+    if (env.YTAHideShorts) {
+      const hideShorts = env.YTAHideShorts.createHideShorts({ settings: settings, doc: doc });
+      api.register("hide-shorts", hideShorts);
+      api.hideShorts = hideShorts;
+    }
+
+    if (env.YTAHideHomeRecommendations) {
+      const hideHomeRecommendations = env.YTAHideHomeRecommendations.createHideHomeRecommendations({ settings: settings, doc: doc });
+      api.register("hide-home-recommendations", hideHomeRecommendations);
+      api.hideHomeRecommendations = hideHomeRecommendations;
     }
 
     if (nav) nav.start();

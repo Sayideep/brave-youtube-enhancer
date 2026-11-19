@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Brave YouTube Enhancer — Features 1+2
+// @name         Brave YouTube Enhancer — Features 1–4
 // @namespace    http://tampermonkey.net/
-// @version      0.2.0
-// @description  Feature 1: Go back when a YouTube video ends. Feature 2: Hide end-screen cards/recommendations.
+// @version      0.3.0
+// @description  Go back on video end, hide end-screen cards, Shorts, and homepage recommendations.
 // @author       Sayideep
 // @match        *://www.youtube.com/*
 // @grant        none
@@ -18,7 +18,9 @@
     backInPlaylists: false,  // never fight playlist auto-advance unless true
     skipIfFullscreen: false, // leave fullscreen users alone unless true
     debug: false,            // log decisions to console.debug
-    hideEndScreen: true      // Feature 2: hide end-screen cards/recommendations
+    hideEndScreen: true,          // hide end-screen cards/recommendations
+    hideShorts: true,             // hide Shorts shelves, tiles, and links
+    hideHomeRecommendations: true // hide homepage video feed only
   };
 
   /* ── SPA navigation tracker ─────────────────────────────────────── */
@@ -171,6 +173,52 @@
   }
   applyHideEndScreen();
 
+  /* ── Feature 3: hide Shorts ─────────────────────────────────────── */
+  const HIDE_SHORTS_STYLE_ID = "yta-hide-shorts-style";
+  const HIDE_SHORTS_CSS = [
+    'a[href^="/shorts/"],',
+    'ytd-reel-shelf-renderer,',
+    'ytd-rich-shelf-renderer[is-shorts],',
+    'ytd-reel-item-renderer,',
+    'ytm-reel-shelf-renderer,',
+    'ytm-shorts-lockup-view-model { display: none !important; }'
+  ].join("\n");
+
+  function applyHideShorts() {
+    const existing = document.getElementById(HIDE_SHORTS_STYLE_ID);
+    if (SETTINGS.hideShorts) {
+      if (!existing) {
+        const style = document.createElement("style");
+        style.id = HIDE_SHORTS_STYLE_ID;
+        style.textContent = HIDE_SHORTS_CSS;
+        (document.head || document.documentElement).appendChild(style);
+      }
+    } else if (existing) existing.remove();
+  }
+  applyHideShorts();
+
+  /* ── Feature 4: hide homepage recommendations ──────────────────── */
+  const HIDE_HOME_STYLE_ID = "yta-hide-home-recommendations-style";
+  const HIDE_HOME_CSS = [
+    'ytd-browse[page-subtype="home"] ytd-rich-grid-renderer,',
+    'ytd-browse[page-subtype="home"] ytd-two-column-browse-results-renderer {',
+    '  display: none !important;',
+    '}'
+  ].join("\n");
+
+  function applyHideHomeRecommendations() {
+    const existing = document.getElementById(HIDE_HOME_STYLE_ID);
+    if (SETTINGS.hideHomeRecommendations) {
+      if (!existing) {
+        const style = document.createElement("style");
+        style.id = HIDE_HOME_STYLE_ID;
+        style.textContent = HIDE_HOME_CSS;
+        (document.head || document.documentElement).appendChild(style);
+      }
+    } else if (existing) existing.remove();
+  }
+  applyHideHomeRecommendations();
+
   /* ── public debug handle ────────────────────────────────────────── */
   window.__ytaFeature1 = {
     evaluate: evaluate,
@@ -182,8 +230,10 @@
     previousUrl: previousUrl,
     videoId: videoId,
     settings: SETTINGS,
-    applyHideEndScreen: applyHideEndScreen
+    applyHideEndScreen: applyHideEndScreen,
+    applyHideShorts: applyHideShorts,
+    applyHideHomeRecommendations: applyHideHomeRecommendations
   };
 
-  debug("loaded (F1+F2)");
+  debug("loaded (F1-F4)");
 })();

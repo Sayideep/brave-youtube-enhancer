@@ -13,6 +13,8 @@ test("DEFAULTS are sane (Feature 1 ON, playlists untouched, fullscreen allowed, 
   assert.equal(YTAEnhancer.DEFAULTS.skipIfFullscreen, false);
   assert.equal(YTAEnhancer.DEFAULTS.debug, false);
   assert.equal(YTAEnhancer.DEFAULTS.hideEndScreen, true);
+  assert.equal(YTAEnhancer.DEFAULTS.hideShorts, true);
+  assert.equal(YTAEnhancer.DEFAULTS.hideHomeRecommendations, true);
 });
 
 test("createEnhancer wires nav + video-end-back feature end-to-end", () => {
