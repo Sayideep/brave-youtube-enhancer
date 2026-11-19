@@ -12,7 +12,8 @@
     'ytd-rich-shelf-renderer[is-shorts],',
     'ytd-reel-item-renderer,',
     'ytm-reel-shelf-renderer,',
-    'ytm-shorts-lockup-view-model { display: none !important; }'
+    'ytm-shorts-lockup-view-model,',
+    'ytm-reel-item-renderer { display: none !important; }'
   ].join("\n");
 
   function createHideShorts(opts) {

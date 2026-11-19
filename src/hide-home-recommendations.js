@@ -11,6 +11,10 @@
     'ytd-browse[page-subtype="home"] ytd-rich-grid-renderer,',
     'ytd-browse[page-subtype="home"] ytd-two-column-browse-results-renderer {',
     '  display: none !important;',
+    '}',
+    'ytm-browse[page-subtype="home"] ytm-rich-grid-renderer,',
+    'ytm-browse[page-subtype="home"] ytm-rich-section-renderer {',
+    '  display: none !important;',
     '}'
   ].join("\n");
 

@@ -5,6 +5,7 @@
 // @description  Go back on video end, hide end-screen cards, Shorts, and homepage recommendations.
 // @author       Sayideep
 // @match        *://www.youtube.com/*
+// @match        *://m.youtube.com/*
 // @grant        none
 // @run-at       document-idle
 // ==/UserScript==
@@ -77,10 +78,10 @@
 
   function playerOf(video) {
     if (video && typeof video.closest === "function") {
-      const p = video.closest("#movie_player");
+      const p = video.closest("#movie_player") || video.closest("ytm-player") || video.closest(".html5-video-player");
       if (p) return p;
     }
-    return document.getElementById("movie_player");
+    return document.getElementById("movie_player") || document.querySelector("ytm-player");
   }
 
   function isMainContentVideo(video) {
@@ -181,7 +182,8 @@
     'ytd-rich-shelf-renderer[is-shorts],',
     'ytd-reel-item-renderer,',
     'ytm-reel-shelf-renderer,',
-    'ytm-shorts-lockup-view-model { display: none !important; }'
+    'ytm-shorts-lockup-view-model,',
+    'ytm-reel-item-renderer { display: none !important; }'
   ].join("\n");
 
   function applyHideShorts() {
@@ -202,6 +204,10 @@
   const HIDE_HOME_CSS = [
     'ytd-browse[page-subtype="home"] ytd-rich-grid-renderer,',
     'ytd-browse[page-subtype="home"] ytd-two-column-browse-results-renderer {',
+    '  display: none !important;',
+    '}',
+    'ytm-browse[page-subtype="home"] ytm-rich-grid-renderer,',
+    'ytm-browse[page-subtype="home"] ytm-rich-section-renderer {',
     '  display: none !important;',
     '}'
   ].join("\n");

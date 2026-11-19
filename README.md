@@ -7,7 +7,7 @@ Modular, additive YouTube features for Brave (desktop).
 - **Feature 3:** Hide Shorts shelves, tiles, and links.
 - **Feature 4:** Hide the recommended video feed on the homepage only; search, subscriptions, and watch pages are not targeted.
 
-Nothing in Brave or YouTube is modified. Plain MV3 content-script extension / userscript. Feature 1 navigates to the previous URL when the main video ends (with guards). Features 2–4 inject scoped CSS to hide their respective YouTube UI.
+Nothing in Brave or YouTube is modified. Plain MV3 content-script extension / userscript. Feature 1 navigates to the previous URL when the main video ends (with guards). Features 2–4 inject scoped CSS to hide their respective YouTube UI. The extension and userscript match both `www.youtube.com` and `m.youtube.com`; mobile selectors are included where YouTube's mobile DOM differs.
 
 ## Why this approach (research summary, 2026-11)
 
@@ -123,13 +123,19 @@ then watch `[YTA]` messages (`skip (ad)`, `going back to …`).
 Every feature gets the same navigation tracker (`nav`), settings store, and
 lifecycle — no duplicated SPA plumbing.
 
-## Brave Android
+## Desktop, laptop, and Android
 
-Not installable on phones today: Brave Android ships extensions only behind
-`brave://flags` (experimental, tablets/foldables first, no phone UI — issue
-brave-browser#59354). When phone support ships, this same unpacked/crx path
-is expected to work; nothing in this project is desktop-specific except the
-assumption that `chrome.storage` is available.
+Desktop and laptop Brave use `https://www.youtube.com/`. Android YouTube may
+use `https://m.youtube.com/`; both hosts are included in the extension and
+userscript matches. This is **code-level mobile-web compatibility**, not proof
+of installation or live testing on an Android device.
+
+Brave Android stable does not provide the normal extension installation path
+used on desktop. If the phone browser cannot install a userscript manager,
+these features cannot run there yet. The Android selectors are best-effort and
+may need updates as YouTube changes its mobile DOM. The end-of-video feature
+also depends on the mobile player exposing a video element within one of the
+supported player containers.
 
 ## License
 

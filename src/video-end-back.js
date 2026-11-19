@@ -27,10 +27,13 @@
 
     function playerOf(video) {
       if (video && typeof video.closest === "function") {
-        const p = video.closest("#movie_player");
+        const p =
+          video.closest("#movie_player") ||
+          video.closest("ytm-player") ||
+          video.closest(".html5-video-player");
         if (p) return p;
       }
-      return doc.getElementById("movie_player");
+      return doc.getElementById("movie_player") || doc.querySelector("ytm-player");
     }
 
     function debug(msg) {
